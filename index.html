@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f9f9f9;
+    }
+
+    .game-container {
+      text-align: center;
+      padding: 20px;
+      background-color: #ffffff;
+      border: 5px solid #e0e0e0;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .main-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .coin-container {
+      position: relative;
+      margin-right: 20px;
+    }
+
+    .coin {
+      width: 100px;
+      height: 100px;
+      background-color: #ffd700;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.3s;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      border: 5px solid #e07c00;
+    }
+
+    .coin:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .stats {
+      color: #333;
+    }
+
+    #progress-bar {
+      width: 200px;
+      height: 20px;
+      background-color: #e0e0e0;
+      margin-top: 10px;
+      overflow: hidden;
+      border-radius: 5px;
+    }
+
+    #coins-progress {
+      height: 100%;
+      background-color: #4caf50;
+      transition: width 0.5s;
+    }
+
+    .counter-buttons {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .counter-button {
+      background-color: #4caf50;
+      color: #ffffff;
+      padding: 10px 20px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .counter-button:hover {
+      background-color: #45a049;
+    }
+  </style>
+  <title>Clicker Game</title>
+</head>
+<body>
+  <div class="game-container">
+    <div class="main-content">
+      <div class="coin-container">
+        <div id="coin" class="coin" onclick="onClickCoin()"></div>
+        <div class="stats">
+          <p>Coins: <span id="coin-counter">0</span></p>
+          <p>Rebirths: <span id="rebirth-counter">0</span></p>
+        </div>
+      </div>
+      <div id="progress-bar">
+        <div id="coins-progress"></div>
+      </div>
+    </div>
+    <div class="counter-buttons">
+      <button class="counter-button" onclick="resetGame()">Reset Game</button>
+      <button class="counter-button" onclick="rebirth()">Rebirth</button>
+    </div>
+  </div>
+
+  <audio id="click-sound">
+    <source src="click-sound.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    let coins = 0;
+    let rebirths = 0;
+    let clicksNeeded = 100;
+
+    function onClickCoin() {
+      coins++;
+      document.getElementById('coin-counter').innerText = coins;
+      playClickSound();
+      updateProgressBar();
+    }
+
+    function updateProgressBar() {
+      const progressBar = document.getElementById('coins-progress');
+      const progressPercentage = (coins / clicksNeeded) * 100;
+      progressBar.style.width = progressPercentage + '%';
+    }
+
+    function playClickSound() {
+      const clickSound = document.getElementById('click-sound');
+      clickSound.currentTime = 0;
+      clickSound.play();
+    }
+
+    function resetGame() {
+      coins = 0;
+      rebirths = 0;
+      clicksNeeded = 100;
+
+      document.getElementById('coin-counter').innerText = coins;
+      document.getElementById('rebirth-counter').innerText = rebirths;
+      updateProgressBar();
+    }
+
+    function rebirth() {
+      if (coins >= clicksNeeded) {
+        coins = 0;
+        rebirths++;
+        clicksNeeded += 100;
+
+        document.getElementById('coin-counter').innerText = coins;
+        document.getElementById('rebirth-counter').innerText = rebirths;
+        updateProgressBar();
+      }
+    }
+  </script>
+</body>
+</html>
